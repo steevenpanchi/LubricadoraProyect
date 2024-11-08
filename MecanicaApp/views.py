@@ -1,4 +1,5 @@
 import os
+# Soy gil
 import string
 import random
 from django.contrib import messages
