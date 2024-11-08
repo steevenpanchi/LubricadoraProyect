@@ -1,0 +1,123 @@
+{% extends 'base/inicio.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="{% static 'images/logoHeader.png' %}" alt="" class="img-fluid">
+          </div>
+          <div class="col-md-9">
+            <h1 class="display-4">¡Bienvenido!</h1>
+            <p class="lead">Gracias por visitar nuestra página.</p>
+            <hr class="my-4">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h3>Inicio de sesión</h3>
+          </div>
+          <div class="card-body">
+
+            <!-- Formulario para recuperación de contraseña -->
+            <form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+        <button  class="btn btn-primary btn-block">
+        Enviar Correo
+    </button>
+
+
+</form>
+            </div>
+            <div>{{ error }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card-body {
+    padding: 2rem; /* Ajusta este valor según la separación deseada */
+  }
+</style>
+
+<script>
+  // Función para mostrar el formulario de recuperación de contraseña
+  function mostrarFormularioCorreo() {
+    document.getElementById('formRecuperar').style.display = 'block';
+    document.getElementById('loginForm').querySelectorAll('input, button').forEach(el => {
+      el.disabled = true;
+    });
+  }
+
+  // Función para enviar el correo electrónico y mostrar el formulario de token
+  function enviarCorreo() {
+    var correo = document.getElementById('correo').value;
+    // Aquí puedes implementar el código para enviar el correo electrónico y procesar la respuesta
+    document.getElementById('formCorreo').style.display = 'none';
+    document.getElementById('formToken').style.display = 'block';
+    return false; // Evitar envío del formulario por ahora
+  }
+
+  // Función para verificar el token y mostrar el formulario de nueva contraseña
+  function verificarToken() {
+    // Aquí puedes implementar el código para verificar el token y procesar la respuesta
+    document.getElementById('formToken').style.display = 'none';
+    document.getElementById('formNuevaContraseña').style.display = 'block';
+  }
+
+  // Función para guardar la nueva contraseña
+  function guardarContraseña() {
+    // Aquí puedes implementar el código para guardar la nueva contraseña
+    // Por ejemplo, enviar una solicitud al servidor para actualizar la contraseña
+    // Una vez guardada la contraseña, habilitar el formulario de inicio de sesión nuevamente
+    habilitarFormularioLogin();
+  }
+
+  // Función para habilitar el formulario de inicio de sesión
+  function habilitarFormularioLogin() {
+    document.getElementById('loginForm').querySelectorAll('input, button').forEach(el => {
+      el.disabled = false;
+    });
+  }
+
+  // Función para alternar la visibilidad de la contraseña en el formulario de inicio de sesión
+  function togglePasswordVisibilityLogin(button) {
+    var passwordField = document.getElementById("id_password");
+
+    // Comprobar si el campo de contraseña es visible o no
+    var isPasswordVisible = (passwordField.type === "text");
+
+    // Cambiar el tipo de campo de contraseña
+    passwordField.type = isPasswordVisible ? "password" : "text";
+
+    // Cambiar el texto del botón
+    button.textContent = isPasswordVisible ? "Mostrar Contraseña" : "Ocultar Contraseña";
+  }
+
+  // Función para alternar la visibilidad de la contraseña en el formulario de reestablecimiento de contraseña
+  function togglePasswordVisibilityReset(fieldId, button) {
+    var passwordField = document.getElementById(fieldId);
+
+    // Comprobar si el campo de contraseña es visible o no
+    var isPasswordVisible = (passwordField.type === "text");
+
+    // Cambiar el tipo de campo de contraseña
+    passwordField.type = isPasswordVisible ? "password" : "text";
+
+    // Cambiar el texto del botón
+    button.textContent = isPasswordVisible ? "Mostrar Contraseña" : "Ocultar Contraseña";
+  }
+</script>
+
+{% endblock %}
