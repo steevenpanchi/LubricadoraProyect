@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida</title>
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous"
+    />
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Aseguramos que la mitad izquierda ocupe solo la mitad de la pantalla */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Contenedor principal que divide la pantalla en dos partes */
+        .container-main {
+            display: flex;
+            height: 100vh; /* Ocupa toda la altura de la ventana */
+        }
+
+        /* Sección izquierda */
+        .left-side {
+       flex: 1;
+            background-color: #012340;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+            position: relative;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* Círculos decorativos */
+        .circle {
+        position: absolute;
+            border-radius: 50%;
+            background-color: #0E2E6E;
+            opacity: 0.6;
+        }
+
+        .circle-small {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 15%;
+        }
+
+        .circle-large {
+            width: 140px;
+            height: 140px;
+            bottom: 3%;
+            right: 10%;
+        }
+
+        .left-side img {
+            width: 80%;
+            max-width: 450px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-main">
+    <div class="left-side">
+        <div>
+            <img src="{% static 'images/logoHeader.png' %}" alt="Welcome Image">
+        </div>
+        <div class="circle circle-small"></div>
+        <div class="circle circle-large"></div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

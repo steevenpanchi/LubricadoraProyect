@@ -166,6 +166,27 @@ class Employee(Person):
     def get_employee(cls, token):
         return cls.objects.get(token=token)
 
+    @classmethod
+    def get_all_employees(cls):
+        return cls.objects.all()
+
+    @classmethod
+    def delete_empleado(cls, id):
+        empleado = cls.objects.get(pk=id)
+        empleado.delete()
+    @classmethod
+    def get_employee_by_name(cls, employee_id):
+        """
+        Obtiene un empleado por su ID.
+
+        Args:
+            employee_id (int): El ID del empleado.
+
+        Returns:
+            Employee: La instancia del empleado encontrado.
+        """
+        return cls.objects.get(pk=employee_id)
+
 
 class Service(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE, related_name='services')
@@ -226,8 +247,8 @@ class Service(models.Model):
 
 
 class Order(models.Model):
-    PAGADO = 'pagado'
-    ESTADO_FINALIZADO = 'finalizado'
+    PAGADO = 'Pagado'
+    ESTADO_FINALIZADO = 'Finalizado'
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='ordenes')
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='ordenes')

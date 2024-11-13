@@ -51,10 +51,23 @@
                     style="font-family: 'Arial', sans-serif; font-size: 20px"
             >
                 <li class="nav-item">
-                    <a class="nav-link" href='{% url 'login' %}' style="color:#ffff; font-size:17px; font-weight: 500;">
-                        Iniciar Sesión </a>
+                    <a class="nav-link" href="{% url 'mostrarEstacion' %}"
+                       style="color:#ffff; font-size:17px; font-weight: 500;">Inicio</a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href='#' style="color:#ffff; font-size:17px; font-weight: 500;"> Cuenta </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='{% url 'actualizar_estado' %}'
+                       style="color:#ffff; font-size:17px; font-weight: 500;"> Terminar tarea </a>
+                </li>
+          
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"
+                       style="color:#ffff; font-size:17px; font-weight: 500; "> Salir </a>
+
+                </li>
             </ul>
         </div>
     </div>

@@ -1,76 +1,162 @@
-{% extends 'base/autos.html' %}
+{% extends 'base/baseUsuario.html' %}
+{% load static %}
 
 {% block content %}
 
-<!--MIS AUTOS-->
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="mx-auto text-center font-weight-bold">
-      Mis Autos
-    </h1>
-    <button class="btn btn-lg" onclick="window.location.href = '{% url 'registrarAuto' %}'"
-            style="background-color:#A62D43; border-color:#A62D43; color:#ffff">
-      Registrar vehículo
-    </button>
-  </div>
+    <style>
+        /* Estilo del título */
+        h1 {
+            color: #2D2D2D;
+            margin-bottom: 30px;
+        }
 
-  {% for auto in autos %}
-  <div class="row mb-3" >
-    <div class="col-12 col-md-8 offset-md-2">
-      <div class="card shadow">
-        <div class="card-body">
-          <h5 class="card-title text-center" style="font-size: 22px;">Especificaciones</h5>
-          <div class="row">
-            <div class="col-8">
-              <div class="row">
-                <div class="col-6">
-                  <p class="text-center mt-3">Placa:</p>
-                  <p class="placa bg-light p-3 mt-3 text-center" style="font-size: 24px; font-weight: bold;">
-                    {{ auto.placa }}
-                  </p>
-                </div>
-                <div class="col-6 mt-3">
-                  <p>Año: {{ auto.anio }} </p>
-                  <p>Marca: {{ auto.marca }}</p>
-                  <p>Modelo: {{ auto.model }}</p>
-                </div>
-              </div>
-              <button class="btn btn-danger mt-4" onclick="confirmDeletion({{ auto.id }})">
-                Eliminar
-              </button>
-                              <button class="btn btn-danger mt-4" onclick="redirectToServicio('{{auto.id}}')">
-                Pedir Servicios
-              </button>
-            </div>
+        /* Estilo base del botón */
+        .btn-primary {
+            background-color: #8C182D !important;
+            border-color: #8C182D !important;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
 
-          </div>
+        /* Estados del botón */
+        .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        /* Estilos para la tarjeta de auto */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Estilos para la placa */
+        .placa-container {
+            width: 60%;
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            position: relative;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            margin: 0 auto 15px auto; /* Centrar el contenedor */
+        }
+
+        .ecuador-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: gray;
+            margin-bottom: 5px;
+        }
+
+        .ecuador-flag {
+            width: 20px;
+            height: auto;
+            margin-right: 5px;
+        }
+
+        .placa-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Estilos para los botones de acción */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Estilos de texto de las especificaciones */
+        .spec-text {
+            font-size: 16px;
+            color: #555;
+        }
+
+    </style>
+
+    <!--MIS AUTOS-->
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-center mx-auto">Mis Autos</h1>
+            <button class="btn btn-primary" onclick="window.location.href = '{% url 'registrarAuto' %}'">
+                Registrar vehículo
+            </button>
         </div>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
 
-  <script>
-    function confirmDeletion(vehiculoId) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Esta acción no se puede deshacer",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "{% url 'eliminarAuto' auto_id=0 %}".replace('0', vehiculoId);
-        }
-      });
-    }
+        {% for auto in autos %}
+            <div class="row mb-4">
+                <div class="col-12 col-md-8 offset-md-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center font-weight-bold mb-3">Especificaciones</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="text-center spec-text"><strong>Placa:</strong></p>
+                                    <div class="placa-container">
+                                        <div class="ecuador-info">
+                                            <img src="{% static 'images/mundo.png' %}" alt="Bandera de Ecuador"
+                                                 class="ecuador-flag">
+                                            <span class="ecuador-text">ECUADOR</span>
+                                        </div>
+                                        <p class="placa-text">{{ auto.placa }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="spec-text"><strong>Año:</strong> {{ auto.anio }}</p>
+                                    <p class="spec-text"><strong>Marca:</strong> {{ auto.marca }}</p>
+                                    <p class="spec-text"><strong>Modelo:</strong> {{ auto.model }}</p>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="confirmDeletion({{ auto.id }})">
+                                    Eliminar
+                                </button>
+                                <button class="btn btn-primary" onclick="redirectToServicio('{{ auto.id }}')">
+                                    Pedir Servicios
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <script>
+            function confirmDeletion(vehiculoId) {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{% url 'eliminarAuto' auto_id=0 %}".replace('0', vehiculoId);
+                    }
+                });
+            }
+
             function redirectToServicio(id) {
-            const url = `/ordenarServicio/${id}/`;
-            window.location.href = url;
-        }
-  </script>
-</div>
+                const url = `/ordenarServicio/${id}/`;
+                window.location.href = url;
+            }
+        </script>
+    </div>
 
 {% endblock %}

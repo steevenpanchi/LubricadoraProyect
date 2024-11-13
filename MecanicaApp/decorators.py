@@ -1,9 +1,7 @@
 from functools import wraps
 from django.http import JsonResponse
 from django.shortcuts import redirect
-
 from .models import Customer, Admin, Employee
-
 
 def role_login_required(allowed_roles=None):
     if allowed_roles is None:
@@ -40,7 +38,7 @@ def role_login_required(allowed_roles=None):
             if allowed_roles and persona.role not in allowed_roles:
                 return redirect('index')
 
-            request.persona = persona
+            # Asegúrate de pasar `request` y cualquier argumento adicional a la vista original
             return view_func(request, *args, **kwargs)
 
         return _wrapped_view

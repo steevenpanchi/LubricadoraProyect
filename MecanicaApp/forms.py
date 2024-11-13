@@ -1,7 +1,9 @@
 from MecanicaApp.models import Station
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 import re
+
 
 class registerForm(forms.Form):
     user = forms.CharField(label="Usuario", max_length=200, widget=forms.TextInput(
@@ -46,7 +48,6 @@ class registerForm(forms.Form):
         return ci
 
 
-
 # class customer_form(forms.Form):
 class EmailForm(forms.Form):
     email = forms.EmailField(label="Ingresa tu correo", widget=forms.EmailInput(
@@ -67,10 +68,94 @@ class tokenForm(forms.Form):
 
 class loginForm(forms.Form):
     user = forms.CharField(label="Usuario", max_length=200, widget=forms.TextInput(
-        attrs={'class': 'input form-control', 'placeholder': 'Ingrese su usuario'}))
+        attrs={'class': 'input form-control', 'placeholder': 'Usuario'}))
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput(
-        attrs={'class': 'input form-control', 'placeholder': 'Ingrese una contraseña'}))
+        attrs={'class': 'input form-control', 'placeholder': 'Contraseña'}))
 
+
+class crearEmpleadoForm(forms.Form):
+    nombreEmpleado = forms.CharField(
+        label="Nombre",
+        max_length=400,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mt-2',
+            'placeholder': 'Ingrese el nombre del empleado'
+        })
+    )
+
+    apellidoEmpleado = forms.CharField(
+        label="Apellido",
+        max_length=800,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mt-2',
+            'placeholder': 'Ingrese el apellido del empleado'
+        })
+    )
+
+    estacionEmpleado = forms.ModelChoiceField(
+        label="Estación",
+        queryset=Station.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control mt-2'})
+    )
+
+    correoEmpleado = forms.CharField(
+        label="Correo",
+        required=False,  # Aseguramos que no sea obligatorio
+        max_length=800,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control mt-2',
+            'placeholder': 'Ingrese el correo del empleado'
+        }),
+        validators=[EmailValidator(message="Ingrese un correo electrónico válido.")]
+        # Correcto uso de EmailValidator
+    )
+
+
+# Validación personalizada para nombre (solo letras)
+def clean_nombreEmpleado(self):
+    nombre = self.cleaned_data.get('nombreEmpleado')
+    if not nombre.isalpha():
+        raise ValidationError('El nombre solo puede contener letras.')
+    return nombre
+
+
+# Validación personalizada para apellido (solo letras)
+def clean_apellidoEmpleado(self):
+    apellido = self.cleaned_data.get('apellidoEmpleado')
+    if not apellido.isalpha():
+        raise ValidationError('El apellido solo puede contener letras.')
+    return apellido
+
+
+# Validación de correo (debe ser un correo válido)
+def clean_correoEmpleado(self):
+    correo = self.cleaned_data.get('correoEmpleado')
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+        raise ValidationError('Ingrese un correo electrónico válido.')
+    return correo
+
+    # Validación personalizada para el año
+    def clean_año(self):
+        año = self.cleaned_data.get('año')
+        if len(año) != 4 or not año.isdigit():
+            raise forms.ValidationError("El año debe contener exactamente 4 dígitos.")
+        return año
+
+    # Validación personalizada para la placa
+    def clean_placa(self):
+        placa = self.cleaned_data.get('placa')
+        if not placa.isupper():
+            raise forms.ValidationError("La placa debe estar en mayúsculas.")
+        if len(placa) < 7 or len(placa) > 8:
+            raise forms.ValidationError("La placa debe tener entre 7 y 8 caracteres.")
+        return placa
+
+    # Validación personalizada para el color
+    def clean_color(self):
+        color = self.cleaned_data.get('color')
+        if not color.isalpha():
+            raise forms.ValidationError("El color solo puede contener letras.")
+        return color
 
 class crearServicioForm(forms.Form):
     nombreServicio = forms.CharField(
@@ -104,13 +189,9 @@ class crearServicioForm(forms.Form):
 
     estacionServicio = forms.ModelChoiceField(
         label="Estación",
-        queryset=Station.objects.all(),
-        widget=forms.Select(attrs={
-            'class': 'form-control mt-2'
-        })
+        queryset=Station.objects.all(),  # Obtiene todas las estaciones de la base de datos
+        widget=forms.Select(attrs={'class': 'form-control mt-2'})  # Estilo para la lista desplegable
     )
-
-
 
     def clean_precioServicio(self):
         precio = self.cleaned_data.get('precioServicio')
@@ -190,6 +271,7 @@ class retirarAutoForm(forms.Form):
         if not ci.isdigit() or len(ci) != 10:
             raise ValidationError('La cédula debe contener exactamente 10 dígitos.')
         return ci
+
 
 # 4 QR
 class QRCodeForm(forms.Form):

@@ -19,6 +19,8 @@ from django.http import HttpResponse, Http404
 from MecanicaApp.decorators import *
 from django.shortcuts import render, get_object_or_404, redirect
 
+
+
 AUTH_DATABASE = 'auth_db'
 LOG_DATABASE = 'log_db'
 
@@ -178,9 +180,9 @@ def registrar_auto(request):
 
 @role_login_required(allowed_roles=['employee'])
 def mostrar_estacion(request):
-    # Datos de ejemplo, estos datos deben provenir de tu base de datos
     employee = Employee.get_employee(request.session['token'])
     dtos = Order.get_station_dto(employee.station.id)
+    print(dtos)  # Esto te permitirá ver el contenido de dtos en la consola del servidor
     return render(request, 'MainApp/contentEstacion.html', {'dtos': dtos})
 
 
@@ -278,14 +280,24 @@ def generate_order(request):
         if vehicle.customer.token == request.session.get('token'):
             customer = Customer.get_customer(request.session.get('token'))
             services = Service.get_service_list_by_names(request.POST.getlist('servicios'))
-            order = Order()
 
-            order.generate_order(customer, vehicle, services)
+            # Crear la orden
+            order = Order(customer=customer, vehicle=vehicle, state='No Pagado')
+            order.save()
+
+            # Agregar los servicios a la orden
+            order.service.set(services)  # Usando .set() para asignar los servicios
+
+            # Calcular el total, si lo necesitas
+            total = sum(service.price for service in services)
+            order.total = total
+            order.save()
+
             return redirect('mostrarAutos')
         else:
             return redirect('mostrarAutos')
     else:
-        redirect('default_view')
+        return redirect('default_view')
 
 
 @role_login_required(allowed_roles=['admin'])
@@ -458,6 +470,14 @@ def mostrar_servicios(request):
     }
     return render(request, 'MainApp/AdminViews/contentServices.html', context)
 
+@role_login_required(allowed_roles=['admin'])
+def mostrar_empleados(request):
+    employees = Employee.get_all_employees()  # Usa el nuevo método para obtener todos los empleados
+    context = {
+        'employees': employees
+    }
+    return render(request, 'MainApp/AdminViews/contentEmployee.html', context)
+
 
 @role_login_required(allowed_roles=['admin'])
 def crearServicios(request):
@@ -472,6 +492,7 @@ def crearServicios(request):
     else:
         form = crearServicioForm()
     return render(request, 'MainApp/AdminViews/crear_servicio.html', {'form': form})
+
 
 
 @role_login_required(allowed_roles=['admin'])
@@ -492,7 +513,7 @@ def editarServicios(request, id):
         # Inicializar el formulario con los datos actuales del servicio
         form = crearServicioForm(initial={
             'nombreServicio': servicio.name,
-            'descripcionServicio': servicio.name,
+            'descripcionServicio': servicio.description,
             'precioServicio': servicio.price,
             'estacionServicio': servicio.station,
         })
@@ -503,47 +524,91 @@ def editarServicios(request, id):
 @role_login_required(['admin'])
 def agregar_empleado(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        apellido = request.POST.get('apellido')
-        estacion_name = request.POST.get('estacion')
-        email = request.POST.get('email')
+        form = crearEmpleadoForm(request.POST)
+        if form.is_valid():
+            # Extraer datos validados del formulario
+            nombre = form.cleaned_data['nombreEmpleado']
+            apellido = form.cleaned_data['apellidoEmpleado']
+            estacion_name = form.cleaned_data['estacionEmpleado']
+            email = form.cleaned_data['correoEmpleado']
 
-        try:
-            user = AuthUser()
-            employee = Employee()
-            password_char = string.ascii_letters + string.digits
-            password = ''.join(random.choice(password_char) for _ in range(8))
-
-            while not (any(c.isupper() for c in password) and any(c.isdigit() for c in password)):
+            try:
+                # Crear usuario y empleado
+                user = AuthUser()
+                employee = Employee()
+                password_char = string.ascii_letters + string.digits
                 password = ''.join(random.choice(password_char) for _ in range(8))
 
-            username = "emp" + nombre + apellido
+                while not (any(c.isupper() for c in password) and any(c.isdigit() for c in password)):
+                    password = ''.join(random.choice(password_char) for _ in range(8))
 
-            token = user.create_user(username, password, email)
-            employee.create_employee(nombre, apellido, token, Station.get_station_by_name(estacion_name))
-            # 4 Transaction
-            with transaction.atomic(using=AUTH_DATABASE):
-                user.save()
-                with transaction.atomic(using='default'):
-                    employee.save()
-                    send_credentias_email(email, username, password)
-        except IntegrityError as e:
-            return render(request, 'MainApp/AdminViews/registratEmpleado.html', {'error': e})
-        except InvalidPassword as e:
-            return render(request, 'MainApp/AdminViews/registratEmpleado.html', {'error': e})
+                username = "emp" + nombre + apellido
 
-        return redirect('listar_ordenes')
+                token = user.create_user(username, password, email)
+                employee.create_employee(nombre, apellido, token, Station.get_station_by_name(estacion_name))
+
+                # Transacciones para asegurar quetodo se guarde correctamente
+                with transaction.atomic(using=AUTH_DATABASE):
+                    user.save()
+                    with transaction.atomic(using='default'):
+                        employee.save()
+                        send_credentias_email(email, username, password)
+
+                return redirect('listar_ordenes')
+
+            except IntegrityError as e:
+                return render(request, 'MainApp/AdminViews/registratEmpleado.html', {'form': form, 'error': str(e)})
+            except InvalidPassword as e:
+                return render(request, 'MainApp/AdminViews/registratEmpleado.html', {'form': form, 'error': str(e)})
+
     else:
-        estaciones = Station.get_stations()
-        return render(request, 'MainApp/AdminViews/registratEmpleado.html', {'estaciones': estaciones})
+        form = crearEmpleadoForm()
 
+    # Pasar las estaciones al formulario
+    estaciones = Station.get_stations()
+    return render(request, 'MainApp/AdminViews/registratEmpleado.html', {'form': form, 'estaciones': estaciones})
 
 @role_login_required(allowed_roles=['admin'])
+def editarEmpleados(request, id):
+    empleado = get_object_or_404(Employee, pk=id)
+
+    if request.method == 'POST':
+        form = crearEmpleadoForm(request.POST)
+
+        if form.is_valid():
+            empleado.name = form.cleaned_data['nombreEmpleado']
+            empleado.last_name = form.cleaned_data['apellidoEmpleado']
+            empleado.station = form.cleaned_data['estacionEmpleado']
+
+            # Solo usa el valor de correo si se ha ingresado en el formulario.
+            correo = form.cleaned_data.get('correoEmpleado')
+            if correo:
+                # Aquí podrías guardar el correo en algún otro lugar o usarlo según tus necesidades.
+                pass  # Remplaza esto con la lógica deseada
+
+            empleado.save()
+            return redirect('mostrarEmpleados')
+        else:
+            print("Errores en el formulario:", form.errors)
+    else:
+
+        form = crearEmpleadoForm(initial={
+            'nombreEmpleado': empleado.name,
+            'apellidoEmpleado': empleado.last_name,
+            'estacionEmpleado': empleado.station,
+            # No se incluye 'correoEmpleado' ya que `Employee` no tiene un campo de correo
+        })
+
+    return render(request, 'MainApp/AdminViews/editarEmpleado.html', {'form': form, 'employee_id': id})
 def delete_service(request, id):
     print(id)
     Service.delete_service(id)
     return redirect('mostrarServicios')
 
+def delete_empleado(request, id):
+    print(id)
+    Employee.delete_empleado(id)
+    return redirect('mostrarEmple')
 
 @role_login_required(allowed_roles=['customer'])
 def orders(request):

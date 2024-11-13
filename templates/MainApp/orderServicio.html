@@ -1,105 +1,141 @@
-{% extends 'base/autos.html' %}
+{% extends 'base/baseUsuario.html' %}
 
 {% block content %}
 
-<h1 class="mt-5 text-center">Orden de Servicio</h1>
-
-<div class="container mt-4 d-flex justify-content-center">
-
-    <!-- Formulario Registro de Vehiculo-->
-    <form id="formularioServicio" method="post" action='{% url 'generarOrden'%}' class="w-50">
-        {% csrf_token %}
-
-        <!-- Información del vehículo en una tarjeta -->
-        <div class="card mb-4" style="background-color: #F8E5E9; border-color: #A62D43;">
-            <div class="card-header" style="background-color: #A62D43; color: white;">
-                Información del Vehículo
-            </div>
-            <div class="card-body">
-                <p class="card-text"><strong>Año:</strong> {{vechicle.anio}}</p>
-                <p class="card-text"><strong>Marca:</strong> {{vechicle.marca}}</p>
-                <p class="card-text"><strong>Modelo:</strong> {{vechicle.model}}</p>
-                <p class="card-text"><strong>Placa:</strong> {{vechicle.placa}}</p>
-                <p class="card-text"><strong>Color:</strong> {{vechicle.color}}</p>
-            </div>
-        </div>
-
-        <!-- Información del vehículo (datos ocultos) -->
-        <input type="hidden" id="id" name="id" value="{{vechicle.id}}">
-        <input type="hidden" id="año" name="año" value="{{vechicle.anio}}">
-        <input type="hidden" id="marca" name="marca" value="{{vechicle.marca}}">
-        <input type="hidden" id="modelo" name="modelo" value="{{vechicle.model}}">
-        <input type="hidden" id="placa" name="placa" value="{{vechicle.placa}}">
-        <input type="hidden" id="color" name="color" value="{{vechicle.color}}">
-
-        <!-- Sección de selección de servicios -->
-        <div class="form-group mb-3">
-            <label for="servicios" class="form-label"><strong>Seleccione los servicios deseados:</strong></label>
-           
-            <div id="servicios">
-                {% for service in services %}
-                    <div class="form-check mb-2" style="padding-left: 1.5em;">
-                        <input class="form-check-input" type="checkbox" value="{{ service.name }}" id="{{ service.name }}" name="servicios">
-                        <label class="form-check-label" for="cambioAceite">
-                            {{ service.name }}: {{ service.description }}
-                        </label>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="text-center mt-4">
-            <button type="button" class="btn btn-lg" style="background-color:#A62D43; border-color:#A62D43; color:#fff;" onclick="mostrarAlerta()">Generar Orden</button>
-        </div>
-    </form>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    function mostrarAlerta() {
-        const campos = document.querySelectorAll('#formularioServicio [required]');
-
-        let todosLlenos = true;
-        campos.forEach((campo) => {
-            if (!campo.value) {
-                todosLlenos = false;
-            }
-        });
-
-        const servicios = document.querySelectorAll('#servicios input[type="checkbox"]');
-        let algunServicioSeleccionado = false;
-        servicios.forEach((servicio) => {
-            if (servicio.checked) {
-                algunServicioSeleccionado = true;
-            }
-        });
-
-        if (todosLlenos && algunServicioSeleccionado) {
-            Swal.fire({
-                title: '¡Orden generada correctamente!',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                customClass: {
-                    confirmButton: 'swal2-confirm'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('formularioServicio').submit();
-                }
-            });
-        } else {
-            Swal.fire({
-                title: 'Por favor, completa todos los campos y selecciona al menos un servicio.',
-                icon: 'warning',
-                confirmButtonText: 'Aceptar',
-                customClass: {
-                    confirmButton: 'swal2-confirm'
-                }
-            });
+    <style>
+        .btn-primary {
+            background-color: #8C182D !important; /* Forzar color base */
+            border-color: #8C182D !important; /* Forzar color de borde */
         }
-    }
-</script>
+
+        /* Estado hover */
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color al hacer hover */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde al hacer hover */
+        }
+
+        /* Estado active (cuando el botón es presionado) */
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando se hace clic */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando se hace clic */
+        }
+
+        /* Estado focus (cuando el botón recibe el foco) */
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando recibe el foco */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando recibe el foco */
+            box-shadow: none !important; /* Eliminar el resplandor de enfoque predeterminado */
+        }
+    </style>
+
+    <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-top: 30px;margin-bottom: 40px">Orden de Servicio</h1>
+
+    <div class="container mt-4 d-flex justify-content-center">
+        <form id="formularioServicio" method="post" action='{% url 'generarOrden' %}' class="w-100 text-center">
+            {% csrf_token %}
+
+            <!-- Información del Vehículo -->
+            <div class="d-flex justify-content-center">
+                <div class="vehicle-info card shadow-sm mb-4" style="width: 400px; border-radius: 10px;">
+                    <div class="card-header text-white " style="background-color: #8C182D;">
+                        <h5 style="font-size: 18px">Información del Vehículo</h5>
+                    </div>
+                    <div class="card-body" style="text-align: left;">  <!-- Alineación a la izquierda -->
+                        <p><strong>Año:</strong> {{ vechicle.anio }}</p>
+                        <p><strong>Marca:</strong> {{ vechicle.marca }}</p>
+                        <p><strong>Modelo:</strong> {{ vechicle.model }}</p>
+                        <p><strong>Placa:</strong> {{ vechicle.placa }}</p>
+                        <p><strong>Color:</strong> {{ vechicle.color }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información oculta -->
+            <input type="hidden" name="id" value="{{ vechicle.id }}">
+            <input type="hidden" name="año" value="{{ vechicle.anio }}">
+            <input type="hidden" name="marca" value="{{ vechicle.marca }}">
+            <input type="hidden" name="modelo" value="{{ vechicle.model }}">
+            <input type="hidden" name="placa" value="{{ vechicle.placa }}">
+            <input type="hidden" name="color" value="{{ vechicle.color }}">
+
+            <!-- Selección de Servicios -->
+            <div class="service-selection">
+                <h5 class="text-center mb-4" style="color: #8C182D; font-size: 20px">Seleccione los Servicios Deseados</h5>
+                <div class="row">
+                    {% for service in services %}
+                        <div class="col-md-6 mb-3">
+                            <div class="service-card card p-3 shadow-sm" style="border-radius: 10px;">
+                                <div class="d-flex align-items-center">
+                                    <!-- Ícono del servicio -->
+                                    <span class="me-3" style="font-size: 1.5rem; color: #8C182D;">
+                                    <i class="fas fa-cogs"></i>
+                                </span>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="{{ service.name }}"
+                                                   id="{{ service.name }}" name="servicios">
+                                            <label class="form-check-label fw-bold" for="{{ service.name }}">
+                                                {{ service.name }}
+                                            </label>
+                                        </div>
+                                        <p class="text-muted small mb-0">
+                                            {{ service.description }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">
+                    Generar Orden
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function mostrarAlerta() {
+            const campos = document.querySelectorAll('#formularioServicio [required]');
+            let todosLlenos = true;
+
+            campos.forEach((campo) => {
+                if (!campo.value) {
+                    todosLlenos = false;
+                }
+            });
+
+            const servicios = document.querySelectorAll('#servicios input[type="checkbox"]');
+            let algunServicioSeleccionado = false;
+            servicios.forEach((servicio) => {
+                if (servicio.checked) {
+                    algunServicioSeleccionado = true;
+                }
+            });
+
+            if (todosLlenos && algunServicioSeleccionado) {
+                Swal.fire({
+                    title: '¡Orden generada correctamente!',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('formularioServicio').submit();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Por favor, completa todos los campos y selecciona al menos un servicio.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+    </script>
 
 {% endblock %}

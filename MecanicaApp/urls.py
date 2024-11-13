@@ -30,12 +30,16 @@ urlpatterns = [
     path('ordenCliente/<int:id>/', views.detalle_orden_cliente, name='detalle_orden_customer'),
 
 
-    # para registrar un empleado
+    # Empleados
+    path("mostrarEmpleados/", views.mostrar_empleados, name='mostrarEmpleados'),
     path('registrarEmpleado/', views.agregar_empleado, name='registrarEmpleado'),
+    path("editar_empleado/<int:id>/", views.editarEmpleados, name='editar_empleado'),
+    path('deleteEmpleado/<int:id>/', views.delete_empleado, name='deleteEmpleado'),
+
     # Para crear un admin base
     path('admin/create/', views.create_admin, name='create_admin'),
 
-    # Lo de mis amiguitos
+
     path('payment/<int:id>/', views.payment, name='payment'),
     path('transferencia/<int:id>/', views.transferencia, name='transferencia'),
     path('retirarAuto/<int:id>/', views.retirarAuto, name='retirarAuto'),

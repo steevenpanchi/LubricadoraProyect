@@ -1,9 +1,43 @@
 {% extends 'base/baseAdministrador.html' %}
 {% block content %}
     
+        <style>
+        /* Botones */
+        /* Estilo base del botón */
+        .btn-primary {
+            background-color: #8C182D !important; /* Forzar color base */
+            border-color: #8C182D !important;     /* Forzar color de borde */
+        }
+
+        /* Estado hover */
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important;  /* Forzar color al hacer hover */
+            border-color: hsl(350, 72%, 55%) !important;      /* Forzar color de borde al hacer hover */
+        }
+
+        /* Estado active (cuando el botón es presionado) */
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important;  /* Forzar color cuando se hace clic */
+            border-color: hsl(350, 72%, 55%) !important;      /* Forzar color de borde cuando se hace clic */
+        }
+
+        /* Estado focus (cuando el botón recibe el foco) */
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important;  /* Forzar color cuando recibe el foco */
+            border-color: hsl(350, 72%, 55%) !important;      /* Forzar color de borde cuando recibe el foco */
+            box-shadow: none !important;                      /* Eliminar el resplandor de enfoque predeterminado */
+        }
+
+        /* Bajar los botones */
+        .text-center {
+            margin-top: 30px; /* Ajusta el espacio desde el contenido anterior */
+        }
+
+
+    </style>  
  
    <div class="container mt-5">
-        <h1 class="mt-5 text-center">Registrar Servicio</h1>
+        <h1 class="mt-5 text-center" style="color: #2D2D2D;">Registrar Servicio</h1>
         <div class="container mt-4 d-flex justify-content-center">
             <!-- Formulario Registro de Servicio -->
             <form id="formularioServicios" method="post" action="{% url 'crearServicio' %}" class="w-50">

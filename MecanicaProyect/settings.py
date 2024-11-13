@@ -172,8 +172,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = '@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = 'vargasdaniel133@gmail.com'
+EMAIL_HOST_PASSWORD = 'rirjdzuxegqbsazi'
 
 # sesiones en django
 SESSION_COOKIE_AGE = 1800  # 30 minutos

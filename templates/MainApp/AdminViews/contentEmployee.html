@@ -72,21 +72,19 @@
         /* Estilo base del botón */
         .btn-outline-success {
             border-color: #28a745;
-                border-width: 2px; /* Ajusta el grosor del borde según lo necesites */
+            border-width: 2px; /* Ajusta el grosor del borde según lo necesites */
 
         }
 
         /* Estado hover del botón */
         .btn-outline-danger {
             border-color: #dc3545;
-                border-width: 2px; /* Ajusta el grosor del borde según lo necesites */
-
+            border-width: 2px; /* Ajusta el grosor del borde según lo necesites */
 
         }
 
         .btn-outline-success:hover {
             background-color: #28a745;
-
         }
 
         .btn-outline-danger:hover {
@@ -110,23 +108,17 @@
         .table-responsive {
             overflow-x: auto;
         }
-
-        /* Estilo para truncar el texto con puntos suspensivos */
-        .table td.text-wrap {
-            max-width: 200px; /* Ajusta el ancho máximo como desees */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
     </style>
 
     <div class="container mt-5">
         <!-- Título y Botón Nuevo -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="text-center mx-auto" style="color: #2D2D2D; ;margin-bottom: 20px ">
-                Servicios
+                Empleados
             </h1>
-            <button class="btn btn-primary btn-submit" onclick="window.location.href = '{% url 'crearServicio' %}'">
+
+
+            <button class="btn btn-primary btn-submit" onclick="window.location.href = '{% url 'registrarEmpleado' %}'">
                 Nuevo
             </button>
         </div>
@@ -137,25 +129,22 @@
                 <thead>
                 <tr>
                     <th style="max-width: 150px;">Nombre</th>
-                    <th style="max-width: 200px;">Descripción</th>
-                    <th style="max-width: 100px;">Precio</th>
+                    <th style="max-width: 200px;">Apellido</th>
                     <th style="max-width: 200px;">Estación</th>
                     <th style="max-width: 150px;">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for service in services %}
+                {% for employee in employees %}
                     <tr>
-                        <td class="text-wrap" style="max-width: 150px;">{{ service.name }}</td>
-                        <td class="text-wrap" style="max-width: 300px;">
-                            {{ service.description|truncatechars:100 }}  <!-- Limita a 50 caracteres -->
-                        </td>
-                        <td class="text-wrap" style="max-width: 100px;">${{ service.price }}</td>
-                        <td class="text-wrap" style="max-width: 300px;">{{ service.station.station_name }}</td>
+                        <td class="text-wrap" style="max-width: 150px;">{{ employee.name }}</td>
+                        <td class="text-wrap" style="max-width: 300px;">{{ employee.last_name }}</td>
+                        <td class="text-wrap" style="max-width: 300px;">{{ employee.station.station_name }}</td>
                         <td class="text-nowrap">
-                            <a href="{% url 'editar_servicio' service.id %}"
+                            <a href="{% url 'editar_empleado' employee.id %}"
                                class="btn btn-outline-success btn-sm">✏️</a>
-                            <a href="{% url 'deleteService' service.id %}" class="btn btn-outline-danger btn-sm">🗑️</a>
+                            <a href="{% url 'deleteEmpleado' employee.id %}"
+                               class="btn btn-outline-danger btn-sm">🗑️</a>
                         </td>
                     </tr>
                 {% endfor %}

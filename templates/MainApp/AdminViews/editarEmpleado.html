@@ -1,0 +1,60 @@
+{% extends 'base/baseAdministrador.html' %}
+{% block content %}
+
+    <style>
+        /* Botones */
+        .btn-primary {
+            background-color: #8C182D !important;
+            border-color: #8C182D !important;
+        }
+
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+            box-shadow: none !important;
+        }
+
+        .text-center {
+            margin-top: 30px;
+        }
+    </style>
+
+    <div class="container mt-5">
+        <h1 class="mt-5 text-center" style="color: #2D2D2D;">Editar Empleado</h1>
+        <div class="container mt-4 d-flex justify-content-center">
+            <form id="formularioEmpleados" method="post" action="{% url 'editar_empleado' employee_id %}" class="w-50">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="{{ form.nombreEmpleado.id_for_label }}">{{ form.nombreEmpleado.label }}</label>
+                    {{ form.nombreEmpleado }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="{{ form.apellidoEmpleado.id_for_label }}">{{ form.apellidoEmpleado.label }}</label>
+                    {{ form.apellidoEmpleado }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="{{ form.estacionEmpleado.id_for_label }}">{{ form.estacionEmpleado.label }}</label>
+                    {{ form.estacionEmpleado }}
+                </div>
+
+                <!-- Si el campo correoEmpleado está deshabilitado, no lo mostramos en el formulario -->
+             
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary custom-btn btn-submit">Guardar</button>
+                    <a href="{% url 'mostrarEmpleados' %}" class="btn btn-secondary custom-btn btn-cancel">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

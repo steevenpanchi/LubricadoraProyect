@@ -1,185 +1,291 @@
-{% extends 'base/inicio.html' %}
-
+{% extends 'base/baseBienvenida.html' %}
 {% load static %}
 
 {% block content %}
 
-<div class="jumbotron">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="row align-items-center">
-          <div class="col-md-3">
-            <img src="{% static 'images/logoHeader.png' %}" alt="" class="img-fluid">
-          </div>
-          <div class="col-md-9">
-            <h1 class="display-4">¡Bienvenido!</h1>
-            <p class="lead">Gracias por visitar nuestra página.</p>
-            <hr class="my-4">
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header text-center">
-            <h3>Inicio de sesión</h3>
-          </div>
-          <div class="card-body">
+    <style>
+        /* Aseguramos que la sección derecha ocupe toda la mitad derecha de la pantalla */
+        .right-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        /* Aseguramos que el formulario ocupetodo el ancho disponible */
+        .login-container {
+            text-align: center;
+        }
+
+        /* Campo de entrada con imágenes como íconos */
+        .input-icon {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-icon input {
+            padding-left: 50px !important; /* Espacio para el ícono */
+            border-radius: 10px;
+            padding: 10px 20px;
+            width: 325px;
+            height: 50px;
+            font-size: 18px;
+            background-color: white; /* Fondo blanco para los campos de entrada */
+            border: 1px solid #ccc; /* Borde del input */
+        }
+
+        .input-icon_cerrar input {
+            padding-left: 50px !important; /* Espacio para el ícono */
+            border-radius: 10px;
+            padding: 10px 20px;
+            width: 260px;
+            height: 50px;
+            font-size: 18px;
+            background-color: white; /* Fondo blanco para los campos de entrada */
+            border: 1px solid #ccc; /* Borde del input */
+        }
+        .input-icon_cerrar .icon{
+               position: absolute;
+            top: 50%;
+            left: 10px; /* Distancia desde el borde izquierdo */
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+        }
+
+        .input-icon .icon {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            width: 325px;
+            margin: 0 auto; /* Centrar el campo con el botón */
+        }
+
+        .input-group input {
+            flex: 1;
+            padding-right: 10px; /* Espacio entre el input y el botón */
+        }
+
+        .input-group .btn {
+            margin-left: 5px; /* Espacio entre el input y el botón */
+            padding: 10px 20px;
+            font-size: 14px;
+            height: 50px; /* Alineación con el input */
+        }
+
+        .forgot-password {
+            color: #012340;
+            font-size: 18px;
+        }
+
+        .signup-text p {
+            font-size: 18px;
+            margin-top: 40px;
+        }
+
+        .signup-text a {
+            color: #012340;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-primary {
+            background-color: #8C182D !important;
+            border-color: #8C182D !important;
+            width: 325px;
+        }
+
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+            box-shadow: none !important;
+        }
+    </style>
+
+    <div class="right-side">
+        <div class="login-container">
+            <h1 style="color: #2D2D2D;margin-bottom: 30px">Inicio de sesión</h1>
+
             <form method="post" id="loginForm">
-              {% csrf_token %}
-              <div class="form-group">
-                {{ form.user.label_tag }}
-                {{ form.user }}
-              </div>
-              <div class="form-group">
-                {{ form.password.label_tag }}
-                <div class="input-group">
-                  {{ form.password }}
-                  <div class="input-group-append">
-                    <button type="button" class="btn btn-secondary" onclick="togglePasswordVisibilityLogin(this)">
-                      Mostrar Contraseña
-                    </button>
-                  </div>
+                {% csrf_token %}
+
+                <!-- Campo de usuario -->
+                <div class="input-icon">
+                    <img src="{% static 'images/usuario.png' %}" class="icon" alt="User Icon">
+                    {{ form.user }}
                 </div>
-              </div>
-              <div class="text-center mb-3">
-                <button type="submit" class="btn btn-primary" style="background-color:#2C2F40; border-color:#2C2F40;">
-                  Iniciar sesión
+
+                <!-- Campo de contraseña con el botón "Ver" al lado -->
+                <div class="input-group">
+                    <div class="input-icon_cerrar">
+                        <img src="{% static 'images/cerrar.png' %}" class="icon" alt="Password Icon">
+                        {{ form.password }}
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="togglePasswordVisibilityLogin(this)">
+                        Ver
+                    </button>
+                </div>
+
+                <!-- Enlace para olvidar la contraseña -->
+                <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+                    <a href='{% url 'recuperarContraseña' %}' class="forgot-password">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+
+                <!-- Botón de inicio de sesión -->
+                <button type="submit" class="btn btn-primary">
+                    Iniciar sesión
                 </button>
-                <button type="button" class="btn btn-primary" onclick="window.location.href = '{% url 'register' %}'" style="background-color:#A62D43; border-color:#A62D43; margin-left: 10px;">
-                  Registrar
-                </button>
-              </div>
-              <div class="text-center">
-                <!-- Botón para olvidar contraseña -->
-                <a href="#" class="btn btn-link" style="color:#2C2F40;" onclick="window.location.href = '{% url 'recuperarContraseña' %}'">
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
+
+                <!-- Enlace para registrarse -->
+                <div class="signup-text">
+                    <p>¿No tienes cuenta? <a href={% url 'register' %}>Regístrate</a></p>
+                </div>
+
             </form>
 
-
-              <form method="post" id="formToken" style="display: none;">
+            <!-- Formulario para verificar el token -->
+            <form method="post" id="formToken" style="display: none;">
                 {% csrf_token %}
                 <div class="form-group">
-                  <label for="token">Ingrese el token:</label>
-                  <input type="text" class="form-control" id="token" name="token" required>
+                    <label for="token">Ingrese el token:</label>
+                    <input type="text" class="form-control" id="token" name="token" required>
                 </div>
                 <div class="text-center mb-3">
-                  <button type="button" class="btn btn-primary btn-block" onclick="verificarToken()" style="background-color:#A62D43; border-color:#A62D43;">Verificar Token</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="verificarToken()"
+                            style="background-color:#A62D43; border-color:#A62D43;">Verificar Token
+                    </button>
                 </div>
-              </form>
+            </form>
 
-              <form method="post" id="formNuevaContraseña" style="display: none;">
+            <!-- Formulario para cambiar la contraseña -->
+            <form method="post" id="formNuevaContraseña" style="display: none;">
                 {% csrf_token %}
                 <div class="form-group">
-                  <label for="nueva_contraseña">Nueva Contraseña:</label>
-                  <div class="input-group">
-                    <input type="password" class="form-control" id="nueva_contraseña" name="nueva_contraseña" required>
-                    <div class="input-group-append">
-                      <button type="button" class="btn btn-secondary" onclick="togglePasswordVisibilityReset('nueva_contraseña', this)">
-                        Mostrar Contraseña
-                      </button>
+                    <label for="nueva_contraseña">Nueva Contraseña:</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="nueva_contraseña"
+                               name="nueva_contraseña" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                    onclick="togglePasswordVisibilityReset('nueva_contraseña', this)">
+                                Mostrar Contraseña
+                            </button>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="form-group">
-                  <label for="confirmar_contraseña">Confirmar Contraseña:</label>
-                  <div class="input-group">
-                    <input type="password" class="form-control" id="confirmar_contraseña" name="confirmar_contraseña" required>
-                    <div class="input-group-append">
-                      <button type="button" class="btn btn-secondary" onclick="togglePasswordVisibilityReset('confirmar_contraseña', this)">
-                        Mostrar Contraseña
-                      </button>
+                    <label for="confirmar_contraseña">Confirmar Contraseña:</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="confirmar_contraseña"
+                               name="confirmar_contraseña" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                    onclick="togglePasswordVisibilityReset('confirmar_contraseña', this)">
+                                Mostrar Contraseña
+                            </button>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="text-center mb-3">
-                  <button type="submit" class="btn btn-primary btn-block" onclick="guardarContraseña() " style="background-color:#A62D43; border-color:#A62D43;">Guardar Contraseña</button>
+                    <button type="submit" class="btn btn-primary btn-block" onclick="guardarContraseña() "
+                            style="background-color:#A62D43; border-color:#A62D43;">Guardar Contraseña
+                    </button>
                 </div>
-              </form>
-            </div>
-            <div>{{ error }}</div>
-          </div>
+            </form>
         </div>
-      </div>
+        <div>{{ error }}</div>
     </div>
-  </div>
-</div>
 
-<style>
-  .card-body {
-    padding: 2rem; /* Ajusta este valor según la separación deseada */
-  }
-</style>
+    <script>
+        // Función para mostrar el formulario de recuperación de contraseña
+        function mostrarFormularioCorreo() {
+            document.getElementById('formRecuperar').style.display = 'block';
+            document.getElementById('loginForm').querySelectorAll('input, button').forEach(el => {
+                el.disabled = true;
+            });
+        }
 
-<script>
-  // Función para mostrar el formulario de recuperación de contraseña
-  function mostrarFormularioCorreo() {
-    document.getElementById('formRecuperar').style.display = 'block';
-    document.getElementById('loginForm').querySelectorAll('input, button').forEach(el => {
-      el.disabled = true;
-    });
-  }
+        // Función para enviar el correo electrónico y mostrar el formulario de token
+        function enviarCorreo() {
+            var correo = document.getElementById('correo').value;
+            // Aquí puedes implementar el código para enviar el correo electrónico y procesar la respuesta
+            document.getElementById('formCorreo').style.display = 'none';
+            document.getElementById('formToken').style.display = 'block';
+            return false; // Evitar envío del formulario por ahora
+        }
 
-  // Función para enviar el correo electrónico y mostrar el formulario de token
-  function enviarCorreo() {
-    var correo = document.getElementById('correo').value;
-    // Aquí puedes implementar el código para enviar el correo electrónico y procesar la respuesta
-    document.getElementById('formCorreo').style.display = 'none';
-    document.getElementById('formToken').style.display = 'block';
-    return false; // Evitar envío del formulario por ahora
-  }
+        // Función para verificar el token y mostrar el formulario de nueva contraseña
+        function verificarToken() {
+            // Aquí puedes implementar el código para verificar el token y procesar la respuesta
+            document.getElementById('formToken').style.display = 'none';
+            document.getElementById('formNuevaContraseña').style.display = 'block';
+        }
 
-  // Función para verificar el token y mostrar el formulario de nueva contraseña
-  function verificarToken() {
-    // Aquí puedes implementar el código para verificar el token y procesar la respuesta
-    document.getElementById('formToken').style.display = 'none';
-    document.getElementById('formNuevaContraseña').style.display = 'block';
-  }
+        // Función para guardar la nueva contraseña
+        function guardarContraseña() {
+            // Aquí puedes implementar el código para guardar la nueva contraseña
+            // Por ejemplo, enviar una solicitud al servidor para actualizar la contraseña
+            // Una vez guardada la contraseña, habilitar el formulario de inicio de sesión nuevamente
+            habilitarFormularioLogin();
+        }
 
-  // Función para guardar la nueva contraseña
-  function guardarContraseña() {
-    // Aquí puedes implementar el código para guardar la nueva contraseña
-    // Por ejemplo, enviar una solicitud al servidor para actualizar la contraseña
-    // Una vez guardada la contraseña, habilitar el formulario de inicio de sesión nuevamente
-    habilitarFormularioLogin();
-  }
+        // Función para habilitar el formulario de inicio de sesión
+        function habilitarFormularioLogin() {
+            document.getElementById('loginForm').querySelectorAll('input, button').forEach(el => {
+                el.disabled = false;
+            });
+        }
 
-  // Función para habilitar el formulario de inicio de sesión
-  function habilitarFormularioLogin() {
-    document.getElementById('loginForm').querySelectorAll('input, button').forEach(el => {
-      el.disabled = false;
-    });
-  }
+        // Función para alternar la visibilidad de la contraseña en el formulario de inicio de sesión
+        function togglePasswordVisibilityLogin(button) {
+            var passwordField = document.getElementById("id_password");
 
-  // Función para alternar la visibilidad de la contraseña en el formulario de inicio de sesión
-  function togglePasswordVisibilityLogin(button) {
-    var passwordField = document.getElementById("id_password");
+            // Comprobar si el campo de contraseña es visible o no
+            var isPasswordVisible = (passwordField.type === "text");
 
-    // Comprobar si el campo de contraseña es visible o no
-    var isPasswordVisible = (passwordField.type === "text");
+            // Cambiar el tipo de campo de contraseña
+            passwordField.type = isPasswordVisible ? "password" : "text";
 
-    // Cambiar el tipo de campo de contraseña
-    passwordField.type = isPasswordVisible ? "password" : "text";
+            // Cambiar el texto del botón
+            button.textContent = isPasswordVisible ? "Ver" : "Ocultar";
+        }
 
-    // Cambiar el texto del botón
-    button.textContent = isPasswordVisible ? "Mostrar Contraseña" : "Ocultar Contraseña";
-  }
+        // Función para alternar la visibilidad de la contraseña en el formulario de reestablecimiento de contraseña
+        function togglePasswordVisibilityReset(fieldId, button) {
+            var passwordField = document.getElementById(fieldId);
 
-  // Función para alternar la visibilidad de la contraseña en el formulario de reestablecimiento de contraseña
-  function togglePasswordVisibilityReset(fieldId, button) {
-    var passwordField = document.getElementById(fieldId);
+            // Comprobar si el campo de contraseña es visible o no
+            var isPasswordVisible = (passwordField.type === "text");
 
-    // Comprobar si el campo de contraseña es visible o no
-    var isPasswordVisible = (passwordField.type === "text");
+            // Cambiar el tipo de campo de contraseña
+            passwordField.type = isPasswordVisible ? "password" : "text";
 
-    // Cambiar el tipo de campo de contraseña
-    passwordField.type = isPasswordVisible ? "password" : "text";
-
-    // Cambiar el texto del botón
-    button.textContent = isPasswordVisible ? "Mostrar Contraseña" : "Ocultar Contraseña";
-  }
-</script>
+            // Cambiar el texto del botón
+            button.textContent = isPasswordVisible ? "Ver" : "Ocultar";
+        }
+    </script>
 
 {% endblock %}
