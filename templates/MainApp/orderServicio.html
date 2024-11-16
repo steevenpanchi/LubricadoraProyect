@@ -28,7 +28,8 @@
         }
     </style>
 
-    <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-top: 30px;margin-bottom: 40px">Orden de Servicio</h1>
+    <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-top: 30px;margin-bottom: 40px">Orden de
+        Servicio</h1>
 
     <div class="container mt-4 d-flex justify-content-center">
         <form id="formularioServicio" method="post" action='{% url 'generarOrden' %}' class="w-100 text-center">
@@ -60,7 +61,8 @@
 
             <!-- Selección de Servicios -->
             <div class="service-selection">
-                <h5 class="text-center mb-4" style="color: #8C182D; font-size: 20px">Seleccione los Servicios Deseados</h5>
+                <h5 class="text-center mb-4" style="color: #8C182D; font-size: 20px">Seleccione los Servicios
+                    Deseados</h5>
                 <div class="row">
                     {% for service in services %}
                         <div class="col-md-6 mb-3">
@@ -91,7 +93,7 @@
 
             <!-- Botón de Envío -->
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">
+                <button type="submit" class="btn btn-primary" onclick="mostrarAlerta(event)">
                     Generar Orden
                 </button>
             </div>
@@ -100,7 +102,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function mostrarAlerta() {
+        function mostrarAlerta(event) {
+            event.preventDefault();  // Evitar el envío del formulario por defecto
+
             const campos = document.querySelectorAll('#formularioServicio [required]');
             let todosLlenos = true;
 
@@ -110,7 +114,7 @@
                 }
             });
 
-            const servicios = document.querySelectorAll('#servicios input[type="checkbox"]');
+            const servicios = document.querySelectorAll('input[name="servicios"]:checked');
             let algunServicioSeleccionado = false;
             servicios.forEach((servicio) => {
                 if (servicio.checked) {
@@ -125,7 +129,7 @@
                     confirmButtonText: 'Aceptar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('formularioServicio').submit();
+                        document.getElementById('formularioServicio').submit();  // Ahora el formulario se envía
                     }
                 });
             } else {
