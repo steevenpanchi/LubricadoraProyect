@@ -1,178 +1,205 @@
-{% extends 'base/autos.html' %}
+{% extends 'base/baseUsuario.html' %}
 
 {% block content %}
-<style>
-    .containerPayment {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 80vh; 
-        padding: 20px;
-    }
+    <style>
+        .containerPayment {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+            background-color: #f9f9f9; /* Fondo más suave para resaltar el contenido */
+        }
 
-    .card {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 600px; 
-        background-color: #fff;
-    }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
 
-    .text-center {
-        text-align: center;
-    }
+        .card:hover {
+            transform: scale(1.02); /* Efecto visual al pasar el mouse */
+        }
 
-    .section {
-        margin-bottom: 20px;
-    }
+        .text-center {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 35px;
+            color: #2D2D2D;
+            font-family: "Univia Pro";
+        }
 
-    .info-table,
-    .services-table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-bottom: 20px;
-    }
+        .section {
+            margin-bottom: 20px;
+        }
 
-    .info-table th,
-    .info-table td,
-    .services-table th,
-    .services-table td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
+        .info-table,
+        .services-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 0.9rem; /* Tamaño ligeramente más compacto */
+        }
 
-    .services-table thead {
-        background-color: #A62D43;
-        color: white;
-    }
+        .info-table th,
+        .info-table td,
+        .services-table th,
+        .services-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
 
-    .radio-label {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
+        .info-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
 
-    .radio-label input {
-        margin-right: 10px;
-    }
+        .services-table thead {
+            background-color: #A62D43;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
 
-    .btn-submit {
-        background-color: #A62D43;
-        border-color: #A62D43;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 10px; 
-    }
+        .services-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
 
-    .btn-submit:hover {
-        background-color: #8e2536;
-        border-color: #8e2536;
-    }
+        .radio-label {
+            display: flex; /* Asegura que el input y el texto estén en línea */
+            align-items: center; /* Alinea el texto verticalmente con el radio button */
+            margin-bottom: 10px; /* Espaciado entre las filas */
+            font-weight: 500; /* Mantiene la misma apariencia */
+        }
 
-    .btn-cancel {
-        background-color: #ccc;
-        border-color: #ccc;
-        color: black;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+        .radio-label input {
+            margin-right: 10px; /* Espacio entre el botón y el texto */
+        }
 
-    .btn-cancel:hover {
-        background-color: #999;
-        border-color: #999;
-    }
-    
-    .button-group {
-        display: flex;
-        justify-content: center;
-    }
-</style>
+        .button-group {
+            display: flex;
+            justify-content: center; /* Centra los botones horizontalmente */
+            gap: 15px; /* Espacio entre los botones */
+        }
 
-<div class="containerPayment">
-    <div class="card">
-        <h2 class="text-center">Pago</h2>
-        
-        <div class="section">
-            <h5>Información del Auto</h5>
-            <table class="info-table">
-                <tr>
-                    <th>Marca</th>
-                    <td>{{ order.vehicle.marca }}</td>
-                </tr>
-                <tr>
-                    <th>Modelo</th>
-                    <td>{{ order.vehicle.model }}</td>
-                </tr>
-                <tr>
-                    <th>Año</th>
-                    <td>{{ order.vehicle.anio }}</td>
-                </tr>
-            </table>
-        </div>
-        
-        <div class="section">
-            <h5>Servicios</h5>
-            <table class="services-table">
-                <thead>
+
+        .btn-submit {
+            background-color: #8C182D;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: hsl(350, 72%, 55%);
+        }
+
+        .btn-cancel {
+            background-color: #ccc;
+            border: none;
+            color: black;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background-color: #999;
+        }
+
+    </style>
+
+    <div class="containerPayment">
+        <div class="card">
+            <h1 class="text-center">Pago</h1>
+
+            <div class="section">
+                <h5>Información del Auto</h5>
+                <table class="info-table">
+                    <tr>
+                        <th>Marca</th>
+                        <td>{{ order.vehicle.marca }}</td>
+                    </tr>
+                    <tr>
+                        <th>Modelo</th>
+                        <td>{{ order.vehicle.model }}</td>
+                    </tr>
+                    <tr>
+                        <th>Año</th>
+                        <td>{{ order.vehicle.anio }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section">
+                <h5>Servicios</h5>
+                <table class="services-table">
+                    <thead>
                     <tr>
                         <th>Servicio</th>
                         <th>Costo</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for service in services %}
                         <tr>
-                        <td>{{ service.name }}</td>
-                        <td>{{ service.price}}</td>
-                    </tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.price }}</td>
+                        </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+
+            <form method="post" id="paymentForm" action="{% url 'uploadPayment' order.id %}">
+                {% csrf_token %}
+                <div class="section">
+                    <h5>Método de Pago</h5>
+                    {% for radio in form.metodo_pago %}
+                        <label class="radio-label">
+                            {{ radio.tag }}
+                            {{ radio.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-submit" id="aceptarButton">
+                        Aceptar
+                    </button>
+                    <button type="button" class="btn-cancel" onclick="window.location.href='{% url 'mostrarAutos' %}'">
+                        Cancelar
+                    </button>
+                </div>
+
+            </form>
         </div>
-        
-        <form method="post" id="paymentForm" action="{% url 'uploadPayment' order.id %}">
-            {% csrf_token %}
-            <div class="section">
-                <h5>Método de Pago</h5>
-                {% for radio in form.metodo_pago %}
-                <label class="radio-label">
-                    {{ radio.tag }}
-                    {{ radio.choice_label }}
-                </label>
-                {% endfor %}
-            </div>
-        
-            <div class="button-group">
-                <button type="submit" class="btn-submit" id="aceptarButton">
-                    Aceptar
-                </button>
-                <button type="button" class="btn-cancel" onclick="window.location.href='{% url 'mostrarAutos' %}'">
-                    Cancelar
-                </button>
-            </div>
-        
-        </form>
     </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const radios = document.querySelectorAll('input[name="metodo_pago"]');
-        const aceptarButton = document.getElementById('aceptarButton');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radios = document.querySelectorAll('input[name="metodo_pago"]');
+            const aceptarButton = document.getElementById('aceptarButton');
 
-        radios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'transferencia') {
-                    window.location.href = '{% url "transferencia" order.id%}';
-                }
+            radios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (this.value === 'transferencia') {
+                        window.location.href = '{% url "transferencia" order.id%}';
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 {% endblock %}

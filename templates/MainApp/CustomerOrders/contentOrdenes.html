@@ -1,106 +1,113 @@
 {% extends 'base/baseUsuario.html' %}
 
 {% block content %}
-  <style>
-    .table-striped tbody tr:nth-of-type(odd) {
-      background-color: #D9C49C;
-    }
+    <style>
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #D9C49C;
+        }
 
-    .table-striped tbody tr:nth-of-type(even) {
-      background-color: #f8f9fa;
-    }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: #f8f9fa;
+        }
 
-    /* Estilos de la tabla */
-    .table {
-      width: 80%; /* Cambiar el ancho de la tabla */
-      margin: 0 auto; /* Centrar la tabla */
-      margin-bottom: 20px;
-      table-layout: fixed; /* Para que las celdas tengan el mismo ancho */
-      border-collapse: collapse;
-    }
+        /* Estilos de la tabla */
+        .table {
+            width: 100%; /* La tabla ocuparátodo el ancho disponible */
+            margin-bottom: 20px;
+            table-layout: fixed; /* Para garantizar que las columnas tengan el mismo ancho */
+            border-collapse: collapse; /* Para eliminar los espacios entre las celdas */
+        }
 
-    /* Encabezado de la tabla */
-    .table thead th {
-      background-color: #7AACBF;
-      color: white;
-      text-align: center;
-      padding: 8px; /* Reducir el padding */
-      font-weight: bold;
-      border: 1px solid #ccc;
-    }
+        /* Encabezado de la tabla */
+        .table thead th {
+            background-color: #7AACBF;
+            color: white;
+            text-align: center;
+            padding: 12px; /* Reducir el padding */
+            font-weight: bold;
+            border: 1px solid #ccc;
+        }
 
-    /* Estilo de las filas de la tabla */
-    .table tbody td {
-      padding: 8px; /* Reducir el padding */
-      border: 1px solid #E5E7EB;
-      word-wrap: break-word;
-      text-align: center;
-    }
+        /* Estilo de las filas de la tabla */
+        .table tbody td {
+            padding: 8px; /* Reducir el padding */
+            border: 1px solid #E5E7EB;
+            word-wrap: break-word;
+            text-align: center;
+        }
 
-    /* Estilo base del botón */
-    .btn-primary {
-      background-color: #8C182D !important;
-      border-color: #8C182D !important;
-    }
+        /* Estilo base del botón */
+        .btn-primary {
+            background-color: #8C182D !important;
+            border-color: #8C182D !important;
+        }
 
-    /* Estado hover */
-    .btn-primary:hover {
-      background-color: hsl(350, 72%, 55%) !important;
-      border-color: hsl(350, 72%, 55%) !important;
-    }
+        /* Estado hover */
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
 
-    /* Estado active (cuando el botón es presionado) */
-    .btn-primary:active {
-      background-color: hsl(350, 72%, 55%) !important;
-      border-color: hsl(350, 72%, 55%) !important;
-    }
+        /* Estado active (cuando el botón es presionado) */
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
 
-    /* Estado focus (cuando el botón recibe el foco) */
-    .btn-primary:focus {
-      background-color: hsl(350, 72%, 55%) !important;
-      border-color: hsl(350, 72%, 55%) !important;
-      box-shadow: none !important;
-    }
-  </style>
+        /* Estado focus (cuando el botón recibe el foco) */
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+            box-shadow: none !important;
+        }
+    </style>
 
-    <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-top: 30px;margin-bottom: 40px">
-        Ordenes
-    </h1>
+    <div class="container mt-5" style="height: 300px">
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Nombre del Cliente</th>
-                        <th>Vehículo</th>
-                        <th>Valor Total</th>
-                        <th>Estado</th>
-                        <th>Acción</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for orden in ordenes %}
+       <div class="d-flex justify-content-center mb-3">
+            <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-bottom: 30px">
+                Ordenes
+            </h1>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
-                            <td>{{ orden.customer.name }} {{ orden.customer.last_name }}</td>
-                            <td>{{ orden.vehicle.placa }}</td>
-                            <td>{{ orden.total }}</td>
-                            <td>
-                              {% if orden.state == 'Pagado' %}
-                                Pagado
-                              {% else %}
-                                No Pagado
-                              {% endif %}
-                            </td>
-                            <td>
-                                <a href="{% url 'detalle_orden_customer' orden.id %}" class="btn btn-primary">Ver Detalles</a>
-                            </td>
+                            <th>Nombre del Cliente</th>
+                            <th>Vehículo</th>
+                            <th>Valor Total</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for orden in ordenes %}
+                            <tr>
+                                <td>{{ orden.customer.name }} {{ orden.customer.last_name }}</td>
+                                <td>{{ orden.vehicle.placa }}</td>
+                                <td>{{ orden.total }}</td>
+                                <td>
+                                    {% if orden.state == 'pagado' %}
+                                        Pagado
+                                    {% else %}
+                                        No Pagado
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'detalle_orden_customer' orden.id %}" class="btn btn-primary">Ver
+                                        Detalles</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
+
 {% endblock %}

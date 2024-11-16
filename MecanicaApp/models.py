@@ -98,8 +98,8 @@ class Vehicle(models.Model):
             vehicle.placa = decrypt_data(vehicle.placa)
             print(vehicle.placa)
 
-
         return vehicles
+
 
 class Admin(Person):
     def create_admin(self, name, last_name, token):
@@ -174,6 +174,7 @@ class Employee(Person):
     def delete_empleado(cls, id):
         empleado = cls.objects.get(pk=id)
         empleado.delete()
+
     @classmethod
     def get_employee_by_name(cls, employee_id):
         """
@@ -247,8 +248,8 @@ class Service(models.Model):
 
 
 class Order(models.Model):
-    PAGADO = 'Pagado'
-    ESTADO_FINALIZADO = 'Finalizado'
+    PAGADO = 'pagado'
+    ESTADO_FINALIZADO = 'finalizado'
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='ordenes')
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='ordenes')
@@ -273,7 +274,7 @@ class Order(models.Model):
     def get_orders(cls):
         orders = cls.objects.all()
         for order in orders:
-            order.vehicle.placa=decrypt_data(order.vehicle.placa)
+            order.vehicle.placa = decrypt_data(order.vehicle.placa)
         return orders
 
     def __str__(self):
@@ -290,14 +291,15 @@ class Order(models.Model):
         servicios_en_estacion = []
         dto_list = []
         orders = cls.objects.exclude(state=cls.ESTADO_FINALIZADO)
+
         for order in orders:
             order.vehicle.placa = decrypt_data(order.vehicle.placa)
             for service in order.service.all():
-                if service.station.id == station_id and order.state == Station.get_station_by_id(
-                        station_id).station_name:
+                if service.station.id == station_id:
                     servicios_en_estacion.append(service)
                     placa = order.vehicle.placa
                     dto_list.append(StationDTO(order.id, placa, service))
+
         return dto_list
 
     @classmethod

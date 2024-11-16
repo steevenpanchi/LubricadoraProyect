@@ -1,14 +1,43 @@
-{% extends 'base/autos.html' %}
+{% extends 'base/baseUsuario.html' %}
 
 {% block content %}
-<div class="container" style="max-width: 600px; margin: auto; margin-top: 50px;">
-    <div class="card mb-4">
-        <div class="card-body text-center">
-            <h3 class="card-title">¡Registro exitoso!</h3>
-            <p class="card-text">Tu formulario ha sido enviado con éxito. Gracias por tu colaboración.</p>
-            <a href="{% url 'mostrarAutos' %}" class="btn btn-primary">Volver a la página principal</a>
+    <style>
+        .btn-primary {
+            background-color: #8C182D !important; /* Forzar color base */
+            border-color: #8C182D !important; /* Forzar color de borde */
+        }
 
+        /* Estado hover */
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color al hacer hover */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde al hacer hover */
+        }
+
+        /* Estado active (cuando el botón es presionado) */
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando se hace clic */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando se hace clic */
+        }
+
+        /* Estado focus (cuando el botón recibe el foco) */
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando recibe el foco */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando recibe el foco */
+            box-shadow: none !important; /* Eliminar el resplandor de enfoque predeterminado */
+        }
+
+    </style>
+    <div class="container" style="height: 350px">
+        <div class="container" style="max-width: 600px; margin: auto; margin-top: 50px;">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h3 class="card-title">¡Registro exitoso!</h3>
+                    <p class="card-text">Tu formulario ha sido enviado con éxito. Gracias por tu colaboración.</p>
+                    <a href="{% url 'mostrarAutos' %}" class="btn btn-primary">Volver a la página principal</a>
+
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
 {% endblock %}

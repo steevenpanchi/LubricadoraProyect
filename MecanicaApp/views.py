@@ -441,6 +441,7 @@ def subirQR(request):
 
 @role_login_required(allowed_roles=['employee'])
 def update_state(request):
+
     if request.method == 'POST':
         form = QRCodeForm(request.POST, request.FILES)
         if form.is_valid():
@@ -453,6 +454,7 @@ def update_state(request):
                 data = json.loads(json_str)
                 station_id = data['id']
                 station_name = data['station_name']
+                print(f"Station id: {station_id}")
                 Order.update_state(station_id, station_name)
                 return redirect('default_view')
             except (IOError, ValueError) as e:
@@ -608,7 +610,7 @@ def delete_service(request, id):
 def delete_empleado(request, id):
     print(id)
     Employee.delete_empleado(id)
-    return redirect('mostrarEmple')
+    return redirect('mostrarEmpleados')
 
 @role_login_required(allowed_roles=['customer'])
 def orders(request):

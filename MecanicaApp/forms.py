@@ -234,10 +234,12 @@ class PaymentForm(forms.Form):
 
 
 class TransferenciaImgForm(forms.Form):
-    file = forms.ImageField(label='Selecciona un archivo', widget=forms.ClearableFileInput(
-        attrs={'class': 'form-control', 'id': 'formFile', 'accept': 'image/*,.pdf'}))
-
-
+    file = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'style': 'padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;'
+        })
+    )
 class retirarAutoForm(forms.Form):
     name = forms.CharField(label="Nombre", max_length=200, widget=forms.TextInput(
         attrs={'class': 'input form-control', 'placeholder': 'Ingrese su nombre'}))
@@ -282,7 +284,8 @@ class QRCodeForm(forms.Form):
                 'class': 'form-control',
                 'id': 'formFile',
                 'accept': 'image/*',
-                'style': 'max-width: 560px; width: 100%; font-size: 20px;'
+                'style': 'max-width: 560px; width: 100%; font-size: 18px; margin-top:18px'
             }
         )
     )
+

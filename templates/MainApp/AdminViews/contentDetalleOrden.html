@@ -1,170 +1,172 @@
 {% extends 'base/baseAdministrador.html' %}
 
 {% block content %}
-<style>
-  /* Colores de la Tabla */
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #D9C49C;
-  }
+    <style>
+        /* Colores de la Tabla */
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #D9C49C;
+        }
 
-  .table-striped tbody tr:nth-of-type(even) {
-    background-color: #f8f9fa;
-  }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: #f8f9fa;
+        }
 
-  .table thead th {
-    background-color: #7AACBF;
-    color: white;
-    border: 1px solid #7AACBF; /* Asegúrate de definir el borde aquí */
-    text-align: center; /* Centrar el texto en los encabezados */
-    padding: 12px;
-  }
+        .table thead th {
+            background-color: #7AACBF;
+            color: white;
+            border: 1px solid #7AACBF; /* Asegúrate de definir el borde aquí */
+            text-align: center; /* Centrar el texto en los encabezados */
+            padding: 12px;
+        }
 
-  /* Centrar texto de columnas */
-  .text-center {
-    text-align: center;
-  }
+        /* Centrar texto de columnas */
+        .text-center {
+            text-align: center;
+        }
 
-  /* Botones */
- /* Estilo base del botón */
-  .btn-primary {
-    background-color: #8C182D !important; /* Forzar color base */
-    border-color: #8C182D !important;     /* Forzar color de borde */
-  }
+        /* Botones */
+        /* Estilo base del botón */
+        .btn-primary {
+            background-color: #8C182D !important; /* Forzar color base */
+            border-color: #8C182D !important; /* Forzar color de borde */
+        }
 
-  /* Estado hover */
-  .btn-primary:hover {
-    background-color: hsl(350, 72%, 55%) !important;  /* Forzar color al hacer hover */
-    border-color: hsl(350, 72%, 55%) !important;      /* Forzar color de borde al hacer hover */
-  }
+        /* Estado hover */
+        .btn-primary:hover {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color al hacer hover */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde al hacer hover */
+        }
 
-  /* Estado active (cuando el botón es presionado) */
-  .btn-primary:active {
-    background-color: hsl(350, 72%, 55%) !important;  /* Forzar color cuando se hace clic */
-    border-color: hsl(350, 72%, 55%) !important;      /* Forzar color de borde cuando se hace clic */
-  }
+        /* Estado active (cuando el botón es presionado) */
+        .btn-primary:active {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando se hace clic */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando se hace clic */
+        }
 
-  /* Estado focus (cuando el botón recibe el foco) */
-  .btn-primary:focus {
-    background-color: hsl(350, 72%, 55%) !important;  /* Forzar color cuando recibe el foco */
-    border-color: hsl(350, 72%, 55%) !important;      /* Forzar color de borde cuando recibe el foco */
-    box-shadow: none !important;                      /* Eliminar el resplandor de enfoque predeterminado */
-  }
+        /* Estado focus (cuando el botón recibe el foco) */
+        .btn-primary:focus {
+            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando recibe el foco */
+            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando recibe el foco */
+            box-shadow: none !important; /* Eliminar el resplandor de enfoque predeterminado */
+        }
 
-  /* Información de la Orden */
-  .order-info {
-    border: 1px solid #F2E2C4;
-    background-color: #F2E2C4;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    max-width: 400px;
-    font-size: 1em;
-    text-align: center;
-    margin-bottom: 60px;
-  }
+        /* Información de la Orden */
+        .order-info {
+            border: 1px solid #F2E2C4;
+            background-color: #F2E2C4;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-width: 400px;
+            font-size: 1em;
+            text-align: center;
+            margin-bottom: 60px;
+        }
 
-  .order-info .info-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+        .order-info .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
 
-  }
+        }
 
-  .info-item label {
-    font-weight: bold;
-    color: #2D2D2D;
-  }
+        .info-item label {
+            font-weight: bold;
+            color: #2D2D2D;
+        }
 
-  .info-item span {
-    font-weight: normal;
-    color: #555;
-  }
+        .info-item span {
+            font-weight: normal;
+            color: #555;
+        }
 
-  /* Total de la Tabla */
-  .total-row {
-    font-weight: bold;
-    background-color: #E5E7EB;
-    text-align: right;
-  }
+        /* Total de la Tabla */
+        .total-row {
+            font-weight: bold;
+            background-color: #E5E7EB;
+            text-align: right;
+        }
 
-    /* Evidencia de Pago */
-  .payment-evidence {
-    border: 1px solid #E5E7EB;
-    background-color: #F9FAFB;
-    border-radius: 5px;
-    padding: 15px;
-    max-width: 500px;
-    margin: 20px auto;
-    text-align: center;
-  }
+        /* Evidencia de Pago */
+        .payment-evidence {
+            border: 1px solid #E5E7EB;
+            background-color: #F9FAFB;
+            border-radius: 5px;
+            padding: 15px;
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: center;
+        }
 
-  .payment-evidence img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-  }
-</style>
+        .payment-evidence img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
 
-<div class="container mt-5">
-  <div class="d-flex justify-content-center mb-3">
-    <h1 class="text-center font-weight-bold" style="color: #2D2D2D;">
-      Detalle de la Orden
-    </h1>
-  </div>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center mb-3">
+            <h1 class="text-center font-weight-bold" style="color: #2D2D2D;">
+                Detalle de la Orden
+            </h1>
+        </div>
 
-  <!-- Información de la Orden -->
-  <div class="order-info mx-auto">
-    <div class="info-item">
-      <label>ID:</label>
-      <span>{{ orden.id }}</span>
+        <!-- Información de la Orden -->
+        <div class="order-info mx-auto">
+            <div class="info-item">
+                <label>ID:</label>
+                <span>{{ orden.id }}</span>
+            </div>
+            <div class="info-item">
+                <label>Cliente:</label>
+                <span>{{ orden.customer.name }}</span>
+            </div>
+            <div class="info-item">
+                <label>Placa del Vehículo:</label>
+                <span>{{ orden.vehicle.placa }}</span>
+            </div>
+        </div>
+
+        <!-- Tabla de Servicios -->
+        <table class="table table-striped mt-3">
+            <thead>
+            <tr>
+                <th class="text-center">Código del Servicio</th>
+                <th class="text-center">Descripción del Servicio</th>
+                <th class="text-center">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for servicio in servicios %}
+                <tr>
+                    <td class="text-center">{{ servicio.id }}</td>
+                    <td class="text-center">{{ servicio.description }}</td>
+                    <td class="text-center">${{ servicio.price }}</td> <!-- Agrega el símbolo de dólar -->
+                </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="2" class="text-right font-weight-bold">Valor Total</td>
+                <td class="text-center">${{ orden.total }}</td> <!-- Agrega el símbolo de dólar aquí también -->
+            </tr>
+            </tbody>
+        </table>
+
+        <p> ${{ orden.state }}</p>
+
+        <!-- Botón de Regreso -->
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" onclick="window.location.href = '{% url 'ordenes' %}'">Regresar</button>
+        </div>
+
+        <!-- Evidencia de Pago -->
+        {% if orden.state == 'pagado' or orden.state == 'en proceso' or orden.state == 'En espera' %}
+            <h1 class="text-center font-weight-bold mt-5" style="color: #2D2D2D;">
+                Evidencia de Pago
+            </h1>
+            <div class="payment-evidence">
+                <img src="{% url 'imgPayment' id %}" alt="Evidencia de Pago">
+            </div>
+        {% endif %}
     </div>
-    <div class="info-item">
-      <label>Cliente:</label>
-      <span>{{ orden.customer.name }}</span>
-    </div>
-    <div class="info-item">
-      <label>Placa del Vehículo:</label>
-      <span>{{ orden.vehicle.placa }}</span>
-    </div>
-  </div>
-
-  <!-- Tabla de Servicios -->
-  <table class="table table-striped mt-3">
-    <thead>
-      <tr>
-        <th class="text-center">Código del Servicio</th>
-        <th class="text-center">Descripción del Servicio</th>
-        <th class="text-center">Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for servicio in servicios %}
-      <tr>
-        <td class="text-center">{{ servicio.id }}</td>
-        <td class="text-center">{{ servicio.description }}</td>
-        <td class="text-center">${{ servicio.price }}</td> <!-- Agrega el símbolo de dólar -->
-      </tr>
-      {% endfor %}
-      <tr class="total-row">
-        <td colspan="2" class="text-right font-weight-bold">Valor Total</td>
-        <td class="text-center">${{ orden.total }}</td> <!-- Agrega el símbolo de dólar aquí también -->
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Botón de Regreso -->
-  <div class="d-flex justify-content-end">
-    <button class="btn btn-primary" onclick="window.location.href = '{% url 'ordenes' %}'">Regresar</button>
-  </div>
-
-  <!-- Evidencia de Pago -->
-  {% if orden.state == 'pagado' or orden.state == 'en proceso' or orden.state == 'En espera' %}
-    <h1 class="text-center font-weight-bold mt-5" style="color: #2D2D2D;">
-      Evidencia de Pago
-    </h1>
-      <div class="payment-evidence">
-      <img src="{% url 'imgPayment' id %}" alt="Evidencia de Pago">
-    </div>
-  {% endif %}
-</div>
 {% endblock %}

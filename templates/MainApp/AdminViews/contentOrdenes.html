@@ -63,7 +63,7 @@
         }
     </style>
 
-    <div class="container mt-5">
+    <div class="container mt-5" style="height: 300px">
         <!-- Aquí cambiamos para que el título esté centrado -->
         <div class="d-flex justify-content-center mb-3">
             <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-bottom: 30px">
@@ -91,7 +91,7 @@
                                 <td>{{ orden.vehicle.placa }}</td>
                                 <td>${{ orden.total }}</td>
                                 <td>
-                                    {% if orden.state == 'Pagado' %}
+                                    {% if orden.state == 'pagado' %}
                                         Pagado
                                     {% else %}
                                         No Pagado
