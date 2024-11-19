@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-!3tvi627w89oq#+=q=12)_kn@+r8r4b4h!et-1&-y1^3h19emw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,12 +36,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'MecanicaApp',
     'services.AuthService',
     'services.logs',
     'channels',
+    'MecanicaApp',
 
 ]
+
+ASGI_APPLICATION = 'MecanicaProyect.asgi.application'
+
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -159,10 +162,7 @@ MIGRATION_MODULES = {
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Usar memoria para desarrollo
     },
 }
 
@@ -184,4 +184,3 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 # crypt key
 CRYPT_KEY = b'\xc95\x8a\x92\xf0\x1e,\xb4\r\xbf\xc2I\x8fv\x00\xd6\xca\xcc\x9f\xaa\x03\xc8\x83\xdc\x90\x81X^8u\x8d\xd2'
-

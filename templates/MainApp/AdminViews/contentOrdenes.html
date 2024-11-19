@@ -2,6 +2,7 @@
 
 {% block content %}
     <style>
+        /* Mantener los estilos existentes de la tabla */
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: #D9C49C;
         }
@@ -10,61 +11,180 @@
             background-color: #f8f9fa;
         }
 
-        /* Estilos de la tabla */
         .table {
-            width: 100%; /* La tabla ocuparátodo el ancho disponible */
+            width: 100%;
             margin-bottom: 20px;
-            table-layout: fixed; /* Para garantizar que las columnas tengan el mismo ancho */
-            border-collapse: collapse; /* Para eliminar los espacios entre las celdas */
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
-        /* Encabezado de la tabla */
         .table thead th {
-            background-color: #7AACBF;; /* Color de fondo */
-            color: white; /* Color de texto */
-            text-align: center; /* Centrado del texto */
+            background-color: #7AACBF;
+            color: white;
+            text-align: center;
             padding: 12px;
             font-weight: bold;
-            border: 1px solid #ccc; /* Borde para las celdas del encabezado */
+            border: 1px solid #ccc;
         }
 
-        /* Estilo de las filas de la tabla */
         .table tbody td {
-            padding: 10px; /* Espaciado dentro de las celdas */
-            border: 1px solid #E5E7EB; /* Borde sutil en las celdas */
-            word-wrap: break-word; /* Permite que el texto largo se ajuste */
-            text-align: center; /* Centrado del texto en las celdas */
+            padding: 10px;
+            border: 1px solid #E5E7EB;
+            word-wrap: break-word;
+            text-align: center;
         }
 
-
-        /* Estilo base del botón */
         .btn-primary {
-            background-color: #8C182D !important; /* Forzar color base */
-            border-color: #8C182D !important; /* Forzar color de borde */
+            background-color: #8C182D !important;
+            border-color: #8C182D !important;
         }
 
-        /* Estado hover */
-        .btn-primary:hover {
-            background-color: hsl(350, 72%, 55%) !important; /* Forzar color al hacer hover */
-            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde al hacer hover */
-        }
-
-        /* Estado active (cuando el botón es presionado) */
-        .btn-primary:active {
-            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando se hace clic */
-            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando se hace clic */
-        }
-
-        /* Estado focus (cuando el botón recibe el foco) */
+        .btn-primary:hover,
+        .btn-primary:active,
         .btn-primary:focus {
-            background-color: hsl(350, 72%, 55%) !important; /* Forzar color cuando recibe el foco */
-            border-color: hsl(350, 72%, 55%) !important; /* Forzar color de borde cuando recibe el foco */
-            box-shadow: none !important; /* Eliminar el resplandor de enfoque predeterminado */
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+            box-shadow: none !important;
         }
+
+        /* Estilo para el contenedor del chat */
+        #chat-container {
+            width: 60px; /* Hacemos el contenedor un poco más grande */
+            height: 60px;
+            border-radius: 50%;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #8C182D;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        #chat-container:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Estilo del ícono dentro del contenedor */
+        #chat-icon {
+            font-size: 30px;
+            color: white;
+        }
+
+        /* Estilo para mostrar el chat */
+        #chat-content {
+            display: none;
+            width: 300px;
+            height: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            font-family: "Univia Pro"
+
+        }
+
+        /* Estilo para el encabezado del chat */
+        #chat-header {
+            background-color: #012340;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Univia Pro'
+        }
+
+        /* Estilo para la ventana de mensajes */
+        #chat-log {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Estilo para los mensajes */
+        #chat-log .message {
+            padding: 10px;
+            border-radius: 15px;
+            margin: 5px 0;
+            max-width: 80%;
+            word-wrap: break-word;
+            display: inline-block;
+            clear: both;
+        }
+
+        /* Mensajes del usuario alineados a la derecha */
+        #chat-log .user-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+
+        /* Mensajes del bot alineados a la izquierda */
+        #chat-log .bot-message {
+            background-color: #ffffff;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+            border: 1px solid #ddd;
+        }
+
+        /* Estilo para la entrada de mensajes */
+        #chat-input-container {
+            display: flex;
+            margin-top: auto;
+        }
+
+        #chat-message-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            font-size: 14px;
+        }
+
+        #chat-message-submit {
+            background: #8C182D;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        #chat-message-submit:hover {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        /* Estilo para el botón de cerrar el chat */
+        #chat-toggle {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
     </style>
 
-    <div class="container mt-5" style="height: 300px">
-        <!-- Aquí cambiamos para que el título esté centrado -->
+
+    <div class="container mt-5">
+        <!-- Sección de órdenes (mantener igual) -->
         <div class="d-flex justify-content-center mb-3">
             <h1 class="text-center font-weight-bold" style="color: #2D2D2D; margin-bottom: 30px">
                 Ordenes
@@ -108,5 +228,100 @@
                 </div>
             </div>
         </div>
+
+        <!-- Chat -->
+        <div id="chat-container">
+            <div id="chat-icon">
+                <i class="fas fa-comments"></i> <!-- Ícono de burbuja de chat -->
+            </div>
+        </div>
+
+        <div id="chat-content">
+            <div id="chat-header">
+                <h3 style="font-size:23px;margin-top: 10px">Asistente Virtual</h3>
+                <button id="chat-toggle">−</button>
+            </div>
+            <div id="chat-log"></div>
+            <div id="chat-input-container">
+                <input id="chat-message-input" type="text" placeholder="Escribe tu mensaje..."/>
+                <button id="chat-message-submit">Enviar</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const chatContent = document.getElementById('chat-content');
+        const chatLog = document.getElementById('chat-log');
+        const chatMessageInput = document.getElementById('chat-message-input');
+        const chatMessageSubmit = document.getElementById('chat-message-submit');
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatIcon = document.getElementById('chat-icon');
+
+        // Conectar WebSocket
+        const chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+
+        chatSocket.onopen = function (e) {
+            console.log("Conexión WebSocket establecida.");
+        };
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log("Mensaje recibido: ", data.message);
+
+            // Mostrar el mensaje en el chat
+            const messageElement = document.createElement('div');
+            messageElement.textContent = data.message;
+
+            // Asignar clase según el emisor (bot o usuario)
+            if (data.sender === 'user') {
+                messageElement.classList.add('message', 'user-message');
+            } else {
+                messageElement.classList.add('message', 'bot-message');
+            }
+
+            chatLog.appendChild(messageElement);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        chatSocket.onclose = function (e) {
+            console.log("Conexión WebSocket cerrada.");
+        };
+
+        chatSocket.onerror = function (e) {
+            console.error("Error en WebSocket: ", e);
+        };
+
+        // Mostrar chat al hacer clic en el ícono
+        chatIcon.onclick = function () {
+            chatContent.style.display = 'flex';
+            chatContainer.style.display = 'none';
+        };
+
+        // Cerrar chat
+        chatToggle.onclick = function () {
+            chatContent.style.display = 'none';
+            chatContainer.style.display = 'flex';
+        };
+
+        // Enviar mensaje
+        chatMessageSubmit.onclick = function (e) {
+            const message = chatMessageInput.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({'message': message, 'sender': 'user'}));
+                const userMessage = document.createElement('div');
+                userMessage.textContent = message;
+                userMessage.classList.add('message', 'user-message');
+                chatLog.appendChild(userMessage);
+                chatMessageInput.value = '';
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }
+        };
+
+        chatMessageInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                chatMessageSubmit.click();
+            }
+        });
+    </script>
 {% endblock %}
