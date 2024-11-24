@@ -1,6 +1,157 @@
 {% extends 'base/baseEmpleado.html' %}
 
 {% block content %}
+
+    <style>
+        /* Estilos generales para el chat */
+        #chat-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #8C182D;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        #chat-container:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #chat-icon {
+            font-size: 30px;
+            color: white;
+        }
+
+        /* Contenedor del chat */
+        #chat-content {
+            width: 300px;
+            height: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            padding: 10px;
+            display: none; /* Inicialmente oculto */
+            flex-direction: column;
+            font-family: "Univia Pro";
+            transition: transform 0.3s ease-in-out, height 0.3s ease-in-out;
+        }
+
+        #chat-content.show {
+            display: flex;
+        }
+
+        #chat-content.hide {
+            height: 40px; /* Altura mínima al minimizar */
+            padding: 0;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo del encabezado */
+        #chat-header {
+            background-color: #012340;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Univia Pro';
+            font-size: 16px;
+        }
+
+        #chat-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        /* Ocultar log e input al minimizar */
+        #chat-content.hide #chat-log,
+        #chat-content.hide #chat-input-container {
+            display: none;
+        }
+
+        #chat-log {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Estilo de los mensajes */
+        #chat-log .message {
+            padding: 10px;
+            border-radius: 15px;
+            margin: 5px 0;
+            max-width: 80%;
+            word-wrap: break-word;
+            display: inline-block;
+            clear: both;
+        }
+
+        .user-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+
+        .bot-message {
+            background-color: #ffffff;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+            border: 1px solid #ddd;
+        }
+
+        #chat-input-container {
+            display: flex;
+        }
+
+        #chat-message-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            font-size: 14px;
+        }
+
+        #chat-message-submit {
+            background: #8C182D;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        #chat-message-submit:hover {
+            background-color: hsl(350, 72%, 55%) !important;
+            border-color: hsl(350, 72%, 55%) !important;
+        }
+
+        #chat-toggle {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
     <div class="container mt-5" style="height:300px">
         <div class="text-center mb-4 mt-5">
             <h1 class="font-weight-bold" style="color: #2D2D2D; font-family: 'Univia Pro'">
@@ -43,7 +194,105 @@
             </div>
         {% endfor %}
 
+        <div id="chat-container">
+            <div id="chat-icon">
+                <i class="fas fa-comments"></i> <!-- Ícono de burbuja de chat -->
+            </div>
+        </div>
+
+        <div id="chat-content" class="hide">
+            <div id="chat-header">
+                <h3 style="font-size:23px;margin-top: 10px">Asistente Virtual</h3>
+                <button id="chat-toggle">−</button>
+            </div>
+            <div id="chat-log"></div>
+            <div id="chat-input-container">
+                <input id="chat-message-input" type="text" placeholder="Escribe tu mensaje..."/>
+                <button id="chat-message-submit">Enviar</button>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const chatContent = document.getElementById('chat-content');
+        const chatLog = document.getElementById('chat-log');
+        const chatMessageInput = document.getElementById('chat-message-input');
+        const chatMessageSubmit = document.getElementById('chat-message-submit');
+        const chatToggle = document.getElementById('chat-toggle');
+
+        // WebSocket de chat
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/room1/');
+
+        // Cuando el WebSocket se abra, ejecuta esta función
+        chatSocket.onopen = function () {
+            console.log('Conectado al WebSocket');
+        };
+
+        // Cuando recibimos un mensaje desde el WebSocket
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const message = data['message'];
+            const sender = data['sender'];
+
+            console.log("Mensaje recibido desde WebSocket:", data);  // Verifica que el mensaje sea correcto
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.textContent = `${sender}: ${message}`;
+            messageElement.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+
+            chatLog.appendChild(messageElement);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        // Función para enviar el mensaje
+        function sendMessage() {
+            const message = chatMessageInput.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'sender': 'employee'
+                }));
+                chatMessageInput.value = '';
+            }
+        }
+
+        // Cuando el botón de enviar es clickeado
+        chatMessageSubmit.onclick = function () {
+            sendMessage();
+        };
+
+        // Agregar un evento para enviar mensaje cuando presionas Enter
+        chatMessageInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();  // Evitar el salto de línea en el input
+                sendMessage();
+            }
+        });
+
+        // Alternar la visibilidad del chat
+        chatToggle.onclick = function () {
+            if (chatContent.classList.contains('hide')) {
+                chatContent.classList.remove('hide');
+                chatContent.classList.add('show');
+                chatContainer.style.display = 'none';
+            } else {
+                chatContent.classList.remove('show');
+                chatContent.classList.add('hide');
+                chatContainer.style.display = 'flex';
+            }
+        };
+
+        // Mostrar el chat cuando se haga clic en el contenedor
+        chatContainer.onclick = function () {
+            chatContent.classList.remove('hide');
+            chatContent.classList.add('show');
+            chatContainer.style.display = 'none';
+        };
+    </script>
+
 
 
 {% endblock %}
