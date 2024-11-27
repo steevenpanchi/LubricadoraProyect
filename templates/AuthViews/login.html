@@ -46,8 +46,9 @@
             background-color: white; /* Fondo blanco para los campos de entrada */
             border: 1px solid #ccc; /* Borde del input */
         }
-        .input-icon_cerrar .icon{
-               position: absolute;
+
+        .input-icon_cerrar .icon {
+            position: absolute;
             top: 50%;
             left: 10px; /* Distancia desde el borde izquierdo */
             transform: translateY(-50%);
@@ -66,22 +67,36 @@
 
         .input-group {
             display: flex;
-            align-items: center;
+            align-items: center; /* Alinear verticalmente */
+            justify-content: center; /* Centrar en caso de ser necesario */
             width: 325px;
-            margin: 0 auto; /* Centrar el campo con el botón */
+            margin: 0 auto; /* Centrar horizontalmente */
         }
 
-        .input-group input {
-            flex: 1;
-            padding-right: 10px; /* Espacio entre el input y el botón */
+        .input-group .input-icon_cerrar {
+            flex: 1; /* Permite que el campo de entrada ocupe el espacio disponible */
+            position: relative;
+        }
+
+        .input-group .input-icon_cerrar input {
+            width: 100%; /* Ajusta el ancho para que ocupe el espacio restante */
+            border-radius: 10px 0 0 10px; /* Bordes redondeados a la izquierda */
+            height: 50px; /* Asegura una altura constante */
+            padding-left: 50px; /* Espacio para el ícono */
+            border: 1px solid #ccc; /* Bordes */
+            border-right: none; /* Elimina el borde derecho */
         }
 
         .input-group .btn {
-            margin-left: 5px; /* Espacio entre el input y el botón */
-            padding: 10px 20px;
-            font-size: 14px;
-            height: 50px; /* Alineación con el input */
+            height: 50px; /* Igual al campo de entrada */
+            padding: 0 20px; /* Espaciado interno */
+            border-radius: 0 10px 10px 0; /* Bordes redondeados a la derecha */
+            font-size: 16px; /* Tamaño del texto */
+            color: white; /* Color del texto */
+            cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
         }
+
+
 
         .forgot-password {
             color: #012340;
@@ -138,14 +153,18 @@
 
                 <!-- Campo de contraseña con el botón "Ver" al lado -->
                 <div class="input-group">
+                    <!-- Campo de contraseña con ícono -->
                     <div class="input-icon_cerrar">
                         <img src="{% static 'images/cerrar.png' %}" class="icon" alt="Password Icon">
                         {{ form.password }}
                     </div>
+
+                    <!-- Botón Ver -->
                     <button type="button" class="btn btn-secondary" onclick="togglePasswordVisibilityLogin(this)">
                         Ver
                     </button>
                 </div>
+
 
                 <!-- Enlace para olvidar la contraseña -->
                 <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
@@ -261,17 +280,16 @@
 
         // Función para alternar la visibilidad de la contraseña en el formulario de inicio de sesión
         function togglePasswordVisibilityLogin(button) {
-            var passwordField = document.getElementById("id_password");
+            var passwordField = document.querySelector("input[name='password']");
+            if (passwordField) {
+                // Alternar el tipo del campo
+                passwordField.type = passwordField.type === "text" ? "password" : "text";
 
-            // Comprobar si el campo de contraseña es visible o no
-            var isPasswordVisible = (passwordField.type === "text");
-
-            // Cambiar el tipo de campo de contraseña
-            passwordField.type = isPasswordVisible ? "password" : "text";
-
-            // Cambiar el texto del botón
-            button.textContent = isPasswordVisible ? "Ver" : "Ocultar";
+                // Cambiar el texto del botón
+                button.textContent = passwordField.type === "password" ? "Ver" : "Ocultar";
+            }
         }
+
 
         // Función para alternar la visibilidad de la contraseña en el formulario de reestablecimiento de contraseña
         function togglePasswordVisibilityReset(fieldId, button) {
